@@ -1,7 +1,7 @@
 {
   "name": "agent-helper",
   "displayName": "Agent Helper",
-  "description": "Send the active editor file and selected line range to every Codex CLI instance running in the integrated Terminal.",
+  "description": "Send the active editor file and selected line range to Codex CLI or Claude Code instances running in the integrated Terminal.",
   "version": "0.1.0",
   "publisher": "jianminhuang",
   "preview": true,
@@ -33,12 +33,15 @@
   "keywords": [
     "codex",
     "openai",
+    "claude",
+    "anthropic",
     "terminal",
     "reference"
   ],
   "activationEvents": [
     "onStartupFinished",
     "onCommand:agentHelper.sendToCodex",
+    "onCommand:agentHelper.sendToClaudeCode",
     "onCommand:agentHelper.showDetectionState"
   ],
   "main": "./out/extension.js",
@@ -46,11 +49,11 @@
     "commands": [
       {
         "command": "agentHelper.sendToCodex",
-        "title": "Send to Codex ⌨️",
-        "icon": {
-          "light": "assets/codex.svg",
-          "dark": "assets/codex-dark.svg"
-        }
+        "title": "Send to Codex ⌨️"
+      },
+      {
+        "command": "agentHelper.sendToClaudeCode",
+        "title": "Send to Claude Code ⌨️"
       },
       {
         "command": "agentHelper.showDetectionState",
@@ -63,13 +66,11 @@
           "command": "agentHelper.sendToCodex",
           "when": "editorTextFocus && (resourceScheme == file || resourceScheme == vscode-remote)",
           "group": "z_commands@50"
-        }
-      ],
-      "editor/title": [
+        },
         {
-          "command": "agentHelper.sendToCodex",
-          "when": "resourceScheme == file || resourceScheme == vscode-remote",
-          "group": "navigation@100"
+          "command": "agentHelper.sendToClaudeCode",
+          "when": "editorTextFocus && (resourceScheme == file || resourceScheme == vscode-remote)",
+          "group": "z_commands@51"
         }
       ]
     }

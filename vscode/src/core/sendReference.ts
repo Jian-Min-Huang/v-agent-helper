@@ -1,3 +1,4 @@
+import type { SupportedAgent } from "./agent";
 import { buildReference, type ReferenceInput } from "./reference";
 
 export interface SendHost<T> {
@@ -21,11 +22,15 @@ export type SendResult<T> =
       readonly failures: readonly DeliveryFailure<T>[];
     };
 
-export async function sendReference<T>(input: ReferenceInput, host: SendHost<T>): Promise<SendResult<T>> {
+export async function sendReference<T>(
+  input: ReferenceInput,
+  agent: SupportedAgent,
+  host: SendHost<T>,
+): Promise<SendResult<T>> {
   if (!(await host.save())) {
     return { status: "save-failed" };
   }
-  const reference = buildReference(input);
+  const reference = buildReference(input, agent);
   const recipients = await host.recipients();
   if (recipients.length === 0) {
     return { status: "no-recipients", reference };

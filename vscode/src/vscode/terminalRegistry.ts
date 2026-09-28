@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
+import type { SupportedAgent } from "../core/agent";
 import {
-  detectCodexTerminals,
+  detectAgentTerminals,
   type DetectionSource,
   type TerminalSnapshot,
 } from "../core/detection";
@@ -22,7 +23,7 @@ export interface TerminalScan {
   readonly diagnostics: readonly TerminalDiagnostic[];
 }
 
-export class CodexTerminalRegistry implements vscode.Disposable {
+export class AgentTerminalRegistry implements vscode.Disposable {
   private readonly liveExecutions = new Map<vscode.Terminal, LiveExecution>();
   private readonly disposables: vscode.Disposable[];
 
@@ -47,12 +48,12 @@ export class CodexTerminalRegistry implements vscode.Disposable {
     ];
   }
 
-  public async scan(): Promise<TerminalScan> {
+  public async scan(agent: SupportedAgent): Promise<TerminalScan> {
     const [processes, terminals] = await Promise.all([
       readProcessTable(this.log),
       Promise.all(vscode.window.terminals.map(terminal => this.snapshot(terminal))),
     ]);
-    const detections = detectCodexTerminals({ terminals, processes });
+    const detections = detectAgentTerminals(agent, { terminals, processes });
     const sourcesByTerminal = new Map(detections.map(detection => [detection.terminal, detection.sources]));
     const diagnostics = terminals.map(snapshot => ({
       name: snapshot.terminal.name,
@@ -60,7 +61,7 @@ export class CodexTerminalRegistry implements vscode.Disposable {
       sources: sourcesByTerminal.get(snapshot.terminal) ?? [],
     }));
 
-    this.writeState(diagnostics);
+    this.writeState(agent, diagnostics);
     return {
       recipients: detections.map(detection => detection.terminal),
       diagnostics,
@@ -86,19 +87,24 @@ export class CodexTerminalRegistry implements vscode.Disposable {
     };
   }
 
-  private writeState(diagnostics: readonly TerminalDiagnostic[]): void {
-    this.log.appendLine(`[state] ${new Date().toISOString()}`);
+  private writeState(agent: SupportedAgent, diagnostics: readonly TerminalDiagnostic[]): void {
+    const agentName = displayName(agent);
+    this.log.appendLine(`[state:${agent}] ${new Date().toISOString()}`);
     if (diagnostics.length === 0) {
       this.log.appendLine("  no open terminals");
       return;
     }
     for (const diagnostic of diagnostics) {
       const state = diagnostic.sources.length === 0
-        ? "not Codex"
-        : `Codex via ${diagnostic.sources.join(" + ")}`;
+        ? `not ${agentName}`
+        : `${agentName} via ${diagnostic.sources.join(" + ")}`;
       this.log.appendLine(`  ${diagnostic.name} pid=${String(diagnostic.pid)}: ${state}`);
     }
   }
+}
+
+function displayName(agent: SupportedAgent): string {
+  return agent === "codex" ? "Codex" : "Claude Code";
 }
 
 function errorMessage(error: unknown): string {

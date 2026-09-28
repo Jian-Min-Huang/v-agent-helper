@@ -1,3 +1,5 @@
+import type { SupportedAgent } from "./agent";
+
 export interface TextPosition {
   readonly line: number;
   readonly character: number;
@@ -14,7 +16,7 @@ export interface ReferenceInput {
   readonly selection?: TextSelection;
 }
 
-export function buildReference(input: ReferenceInput): string {
+export function buildReference(input: ReferenceInput, agent: SupportedAgent): string {
   const filePath = normalize(input.filePath);
   const root = input.workspaceRoots.length !== 1
     ? undefined
@@ -23,7 +25,8 @@ export function buildReference(input: ReferenceInput): string {
     ? filePath.slice(root.length + 1)
     : filePath;
 
-  return ` ${quoteWhenNeeded(referencePath)}${lineSuffix(input.selection)} `;
+  const prefix = agent === "claude-code" ? "@" : "";
+  return ` ${prefix}${quoteWhenNeeded(referencePath)}${lineSuffix(input.selection)} `;
 }
 
 function quoteWhenNeeded(value: string): string {
