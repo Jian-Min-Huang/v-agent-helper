@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Plugin verification
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: jetbrains
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Eclipse Temurin 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Test, verify, and build the plugin
+        run: ./gradlew --no-daemon test verifyPlugin buildPlugin
+
+  verify-vscode:
+    name: VS Code extension verification
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vscode
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: vscode/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test and compile the extension
+        run: npm run check

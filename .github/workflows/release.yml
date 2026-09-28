@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "!vscode-v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Verify and publish plugin
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+
+      - name: Validate release tag
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag="${RELEASE_TAG}"
+          if [[ ! "${tag}" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::Release tag must use the exact vMAJOR.MINOR.PATCH form."
+            exit 1
+          fi
+
+          if ! tag_commit="$(git rev-parse --verify "refs/tags/${tag}^{commit}")"; then
+            echo "::error::Release tag ${tag} does not exist."
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "${tag_commit}" origin/main; then
+            echo "::error::Release tag must point to a commit in the main branch history."
+            exit 1
+          fi
+
+          version="$(sed -n 's/^pluginVersion=//p' jetbrains/gradle.properties)"
+          if [[ -z "${version}" || "${tag}" != "v${version}" ]]; then
+            echo "::error::Release tag ${tag} does not match project plugin version ${version:-<missing>}."
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Set up Eclipse Temurin 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Test, verify, and build the plugin
+        working-directory: jetbrains
+        run: ./gradlew --no-daemon test verifyPlugin buildPlugin
+
+      - name: Verify release asset
+        id: asset
+        shell: bash
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          expected="jetbrains/build/distributions/v-codex-helper-${VERSION}.zip"
+          shopt -s nullglob
+          archives=(jetbrains/build/distributions/*.zip)
+
+          if [[ "${#archives[@]}" -ne 1 || "${archives[0]:-}" != "${expected}" ]]; then
+            echo "::error::Expected exactly one installable ZIP at ${expected}."
+            exit 1
+          fi
+
+          echo "path=${expected}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ASSET: ${{ steps.asset.outputs.path }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release upload "${RELEASE_TAG}" "${RELEASE_ASSET}" --clobber
+          else
+            gh release create "${RELEASE_TAG}" "${RELEASE_ASSET}" --verify-tag --generate-notes --title "${RELEASE_TAG}"
+          fi

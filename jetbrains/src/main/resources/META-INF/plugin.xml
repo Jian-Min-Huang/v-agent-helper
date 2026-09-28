@@ -1,0 +1,30 @@
+<idea-plugin>
+    <id>tw.jianminhuang.codexhelper</id>
+    <name>Codex Helper</name>
+    <vendor>Vincent Huang</vendor>
+
+    <description>
+        <![CDATA[
+        Adds <b>Send to Codex</b> to the editor's right-click menu and to the toolbar that floats above a selection.
+        It pastes one project-relative reference to the current file (<code>path/to/File.kt</code>), with the selected lines when there is a selection (<code>path/to/File.kt#L10-L20</code>), into every Codex CLI instance running in the current project's Terminal while keeping focus in the editor.
+        ]]>
+    </description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.terminal</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Codex Helper" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action id="tw.jianminhuang.codexhelper.SendToCodex"
+                class="tw.jianminhuang.codexhelper.SendToCodexAction"
+                text="Send to Codex"
+                description="Paste a reference to this file into the Codex CLI running in the Terminal"
+                icon="/icons/codex.svg">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="Floating.CodeToolbar" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
