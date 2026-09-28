@@ -3,9 +3,9 @@ import { sendReference, type SendResult } from "./core/sendReference";
 import type { ReferenceInput } from "./core/reference";
 import { CodexTerminalRegistry } from "./vscode/terminalRegistry";
 
-const SEND_COMMAND = "codexHelper.sendToCodex";
-const SHOW_STATE_COMMAND = "codexHelper.showDetectionState";
-const OUTPUT_CHANNEL = "Codex Helper";
+const SEND_COMMAND = "agentHelper.sendToCodex";
+const SHOW_STATE_COMMAND = "agentHelper.showDetectionState";
+const OUTPUT_CHANNEL = "Agent Helper";
 
 export function activate(context: vscode.ExtensionContext): void {
   const log = vscode.window.createOutputChannel(OUTPUT_CHANNEL, { log: true });

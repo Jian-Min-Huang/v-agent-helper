@@ -1,6 +1,6 @@
 {
-  "name": "codex-helper",
-  "displayName": "Codex Helper",
+  "name": "agent-helper",
+  "displayName": "Agent Helper",
   "description": "Send the active editor file and selected line range to every Codex CLI instance running in the integrated Terminal.",
   "version": "0.1.0",
   "publisher": "jianminhuang",
@@ -8,12 +8,12 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jian-Min-Huang/v-codex-helper.git",
-    "directory": "vs-extension"
+    "url": "https://github.com/Jian-Min-Huang/v-agent-helper.git",
+    "directory": "vscode"
   },
-  "homepage": "https://github.com/Jian-Min-Huang/v-codex-helper#readme",
+  "homepage": "https://github.com/Jian-Min-Huang/v-agent-helper#readme",
   "bugs": {
-    "url": "https://github.com/Jian-Min-Huang/v-codex-helper/issues"
+    "url": "https://github.com/Jian-Min-Huang/v-agent-helper/issues"
   },
   "icon": "assets/codex.png",
   "engines": {
@@ -38,36 +38,36 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:codexHelper.sendToCodex",
-    "onCommand:codexHelper.showDetectionState"
+    "onCommand:agentHelper.sendToCodex",
+    "onCommand:agentHelper.showDetectionState"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "codexHelper.sendToCodex",
-        "title": "Send to Codex ✨",
+        "command": "agentHelper.sendToCodex",
+        "title": "Send to Codex ⌨️",
         "icon": {
           "light": "assets/codex.svg",
           "dark": "assets/codex-dark.svg"
         }
       },
       {
-        "command": "codexHelper.showDetectionState",
-        "title": "Codex Helper: Show Detection State"
+        "command": "agentHelper.showDetectionState",
+        "title": "Agent Helper: Show Detection State"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "codexHelper.sendToCodex",
+          "command": "agentHelper.sendToCodex",
           "when": "editorTextFocus && (resourceScheme == file || resourceScheme == vscode-remote)",
           "group": "z_commands@50"
         }
       ],
       "editor/title": [
         {
-          "command": "codexHelper.sendToCodex",
+          "command": "agentHelper.sendToCodex",
           "when": "resourceScheme == file || resourceScheme == vscode-remote",
           "group": "navigation@100"
         }

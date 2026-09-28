@@ -1,8 +1,8 @@
-# Codex Helper for VS Code
+# Agent Helper for VS Code
 
-Send the active editor file and selected line range to every Codex CLI instance running in the current VS Code window's integrated Terminal.
+Agent Helper sends the active editor file and selected line range to supported coding agents running in the current VS Code window's integrated Terminal. Codex CLI is currently supported.
 
-Select some lines and choose **Send to Codex ✨**. Each Codex input receives the same Reference, such as `src/Foo.ts#L10-L20`. The text is inserted but not submitted, and focus stays in the editor.
+Select some lines and choose **Send to Codex ⌨️**. Each Codex input receives the same Reference, such as `src/Foo.ts#L10-L20`. The text is inserted but not submitted, and focus stays in the editor.
 
 ## Local installation
 
@@ -11,30 +11,30 @@ Select some lines and choose **Send to Codex ✨**. Each Codex input receives th
 1. Open VS Code.
 2. Open the Command Palette with **Cmd+Shift+P** on macOS or **Ctrl+Shift+P** on Windows/Linux.
 3. Run **Extensions: Install from VSIX...**.
-4. Select `vs-extension/codex-helper-0.1.0.vsix` from this repository.
+4. Select `vscode/agent-helper-0.1.0.vsix` from this repository.
 5. Reload VS Code when prompted.
 
 The equivalent terminal command is:
 
 ```sh
-cd vs-extension
-code --install-extension ./codex-helper-0.1.0.vsix --force
+cd vscode
+code --install-extension ./agent-helper-0.1.0.vsix --force
 ```
 
 If you previously installed the POC, remove its old extension ID first so the two versions do not appear side by side:
 
 ```sh
 code --uninstall-extension jianminhuang.codex-helper-poc
-code --install-extension ./codex-helper-0.1.0.vsix --force
+code --install-extension ./agent-helper-0.1.0.vsix --force
 ```
 
 ## Usage
 
 1. Start `codex` in one or more integrated Terminal tabs.
 2. Open a saved file and optionally select some lines.
-3. Choose **Send to Codex ✨** from the editor context menu, click its editor-title icon, or run it from the Command Palette.
+3. Choose **Send to Codex ⌨️** from the editor context menu, click its editor-title icon, or run it from the Command Palette.
 
-There is no default keyboard shortcut. Search for **Send to Codex ✨** in **Keyboard Shortcuts** to add one.
+There is no default keyboard shortcut. Search for **Send to Codex ⌨️** in **Keyboard Shortcuts** to add one.
 
 ### What gets sent
 
@@ -58,7 +58,7 @@ The extension broadcasts once to every Codex instance it detects in the current 
 - A process-tree fallback for Codex already running before extension activation or terminals without shell integration.
 - `ps` on macOS/Linux and PowerShell CIM on Windows.
 
-Run **Codex Helper: Show Detection State** from the Command Palette to inspect Terminal names, PIDs, and detection sources in the **Codex Helper** output channel.
+Run **Agent Helper: Show Detection State** from the Command Palette to inspect Terminal names, PIDs, and detection sources in the **Agent Helper** output channel.
 
 ## Requirements
 
@@ -69,7 +69,7 @@ Run **Codex Helper: Show Detection State** from the Command Palette to inspect T
 ## Development
 
 ```sh
-cd vs-extension
+cd vscode
 npm install
 npm run check
 code .
@@ -85,13 +85,13 @@ The core behavior is tested through three interfaces: Reference construction, Co
 2. Verify and package:
 
    ```sh
-   cd vs-extension
+   cd vscode
    npm ci
    npm run check
    npm run package
    ```
 
-3. Install the generated `codex-helper-VERSION.vsix` locally and repeat the Usage checks above.
+3. Install the generated `agent-helper-VERSION.vsix` locally and repeat the Usage checks above.
 4. Commit the release version and create a tag named `vscode-vVERSION`.
 5. Create a GitHub Release manually and upload the generated VSIX.
 
@@ -99,10 +99,10 @@ Publishing to the VS Code Marketplace is intentionally separate from this manual
 
 ## Uninstall
 
-Open the Extensions view, find **Codex Helper**, and choose **Uninstall**. The command-line equivalent is:
+Open the Extensions view, find **Agent Helper**, and choose **Uninstall**. The command-line equivalent is:
 
 ```sh
-code --uninstall-extension jianminhuang.codex-helper
+code --uninstall-extension jianminhuang.agent-helper
 ```
 
 ## Known limitations
@@ -110,4 +110,4 @@ code --uninstall-extension jianminhuang.codex-helper
 - VS Code's `Terminal.sendText` does not acknowledge that the terminal application consumed the input. A missing error means the extension attempted the delivery, not that Codex confirmed receipt.
 - Terminal process discovery depends on process information being visible to the VS Code extension host.
 
-Codex Helper is an independent extension and is not affiliated with or endorsed by OpenAI.
+Agent Helper is an independent extension and is not affiliated with or endorsed by OpenAI.
