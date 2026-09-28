@@ -46,7 +46,7 @@
     "commands": [
       {
         "command": "codexHelper.sendToCodex",
-        "title": "Send to Codex",
+        "title": "Send to Codex ✨",
         "icon": {
           "light": "assets/codex.svg",
           "dark": "assets/codex-dark.svg"

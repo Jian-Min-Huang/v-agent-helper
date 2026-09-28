@@ -2,7 +2,7 @@
 
 Send the active editor file and selected line range to every Codex CLI instance running in the current VS Code window's integrated Terminal.
 
-Select some lines and choose **Send to Codex**. Each Codex input receives the same Reference, such as `src/Foo.ts#L10-L20`. The text is inserted but not submitted, and focus stays in the editor.
+Select some lines and choose **Send to Codex ✨**. Each Codex input receives the same Reference, such as `src/Foo.ts#L10-L20`. The text is inserted but not submitted, and focus stays in the editor.
 
 ## Local installation
 
@@ -32,9 +32,9 @@ code --install-extension ./codex-helper-0.1.0.vsix --force
 
 1. Start `codex` in one or more integrated Terminal tabs.
 2. Open a saved file and optionally select some lines.
-3. Choose **Send to Codex** from the editor context menu, click its editor-title icon, or run it from the Command Palette.
+3. Choose **Send to Codex ✨** from the editor context menu, click its editor-title icon, or run it from the Command Palette.
 
-There is no default keyboard shortcut. Search for **Send to Codex** in **Keyboard Shortcuts** to add one.
+There is no default keyboard shortcut. Search for **Send to Codex ✨** in **Keyboard Shortcuts** to add one.
 
 ### What gets sent
 

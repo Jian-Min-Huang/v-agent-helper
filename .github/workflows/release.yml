@@ -78,22 +78,9 @@ jobs:
 
       - name: Verify release asset
         id: asset
-        shell: bash
         env:
           VERSION: ${{ steps.release.outputs.version }}
-        run: |
-          set -euo pipefail
-
-          expected="jetbrains/build/distributions/v-codex-helper-${VERSION}.zip"
-          shopt -s nullglob
-          archives=(jetbrains/build/distributions/*.zip)
-
-          if [[ "${#archives[@]}" -ne 1 || "${archives[0]:-}" != "${expected}" ]]; then
-            echo "::error::Expected exactly one installable ZIP at ${expected}."
-            exit 1
-          fi
-
-          echo "path=${expected}" >> "${GITHUB_OUTPUT}"
+        run: .github/scripts/verify-jetbrains-release-asset.sh "${VERSION}"
 
       - name: Create or update GitHub Release
         env:

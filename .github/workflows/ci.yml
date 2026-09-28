@@ -35,6 +35,17 @@ jobs:
       - name: Test, verify, and build the plugin
         run: ./gradlew --no-daemon test verifyPlugin buildPlugin
 
+      - name: Verify installable ZIP
+        id: jetbrains_asset
+        run: ../.github/scripts/verify-jetbrains-release-asset.sh
+
+      - name: Upload installable ZIP
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jetbrains-plugin-${{ steps.jetbrains_asset.outputs.version }}
+          path: ${{ steps.jetbrains_asset.outputs.path }}
+          if-no-files-found: error
+
   verify-vscode:
     name: VS Code extension verification
     runs-on: ubuntu-latest

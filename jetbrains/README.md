@@ -1,11 +1,11 @@
 # Codex Helper
 
-[![CI](https://github.com/Jian-Min-Huang/v-codex-helper/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jian-Min-Huang/v-codex-helper/actions/workflows/ci.yml)
+[![CI](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml)
 
 This repository contains two IDE extensions:
 
-- The IntelliJ IDEA plugin in the repository root, documented below.
-- The [VS Code extension](vs-extension/README.md) in `vs-extension/`.
+- The IntelliJ IDEA plugin in `jetbrains/`, documented below.
+- The [VS Code extension](../vscode/README.md) in `vscode/`.
 
 An IntelliJ IDEA plugin that sends your place in the editor to every [Codex CLI](https://github.com/openai/codex) instance running in the current project's Terminal.
 Select some lines, choose **Send to Codex**, and each Codex input gets the same reference, such as `src/Foo.kt#L10-L20`, while you stay in the editor.
@@ -66,7 +66,7 @@ The right-click menu works for any local file.
 
 ## Install
 
-Download the plugin ZIP from the [latest GitHub Release](https://github.com/Jian-Min-Huang/v-codex-helper/releases/latest). Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
+Download the plugin ZIP from the [latest GitHub Release](https://github.com/Jian-Min-Huang/v-agent-helper/releases/latest). Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
 
 To build the plugin from source instead:
 
@@ -86,7 +86,7 @@ You need JDK 21.
 ./gradlew verifyPlugin  # check compatibility with the target IDE
 ```
 
-CI runs `./gradlew --no-daemon test verifyPlugin buildPlugin` for every pull request and every push to `main` on Eclipse Temurin 21. After the first successful run, maintainers should make the **Plugin verification** result a required status check for `main` in the repository's branch protection settings.
+CI runs `./gradlew --no-daemon test verifyPlugin buildPlugin` for every pull request and every push to `main` on Eclipse Temurin 21. It validates the installable ZIP and retains it as a workflow artifact. After the first successful run, maintainers should make the **Plugin verification** result a required status check for `main` in the repository's branch protection settings.
 
 ### Publishing a release
 
