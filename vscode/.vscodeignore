@@ -1,0 +1,9 @@
+**/.DS_Store
+.gitignore
+*.vsix
+logs/**
+out-test/**
+src/**
+test/**
+tsconfig.json
+tsconfig.test.json
