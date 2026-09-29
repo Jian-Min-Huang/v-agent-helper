@@ -2,11 +2,6 @@
 
 [![CI](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml)
 
-This repository contains two IDE extensions:
-
-- The IntelliJ IDEA plugin in `jetbrains/`, documented below.
-- The [VS Code extension](../vscode/README.md) in `vscode/`.
-
 An IntelliJ IDEA plugin that sends your place in the editor to every [Codex CLI](https://github.com/openai/codex) instance running in the current project's Terminal.
 Select some lines, choose **Send to Codex**, and each Codex input gets the same reference, such as `src/Foo.kt#L10-L20`, while you stay in the editor.
 It does for Codex what **Send to Claude Code** does in Claude Code's JetBrains plugin.
