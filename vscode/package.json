@@ -90,6 +90,6 @@
     "@types/node": "^26.6.2",
     "@types/vscode": "1.93.0",
     "@vscode/vsce": "^4.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^7.0.2"
   }
 }
