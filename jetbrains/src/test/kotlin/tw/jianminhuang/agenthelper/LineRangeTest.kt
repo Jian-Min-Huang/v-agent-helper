@@ -1,7 +1,7 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.reference.LineRange
-import tw.jianminhuang.codexhelper.reference.TextPosition
+import tw.jianminhuang.agenthelper.reference.LineRange
+import tw.jianminhuang.agenthelper.reference.TextPosition
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

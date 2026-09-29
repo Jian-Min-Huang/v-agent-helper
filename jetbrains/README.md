@@ -1,4 +1,4 @@
-# Codex Helper
+# Agent Helper
 
 [![CI](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml)
 
@@ -107,4 +107,4 @@ If publication is interrupted, open the repository's **Actions › Release › R
 
 ---
 
-Codex Helper is an independent plugin and isn't affiliated with or endorsed by OpenAI. The action's icon is OpenAI's logo, used to identify Codex.
+Agent Helper is an independent plugin and isn't affiliated with or endorsed by OpenAI. The action's icon is OpenAI's logo, used to identify Codex.

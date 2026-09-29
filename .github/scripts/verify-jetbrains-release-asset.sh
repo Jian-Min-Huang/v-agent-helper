@@ -25,7 +25,7 @@ if [[ ! "${configured_version}" =~ ^[0-9A-Za-z][0-9A-Za-z._-]*$ ]]; then
 fi
 
 distribution_directory="${repository_root}/jetbrains/build/distributions"
-archive_name="v-codex-helper-${configured_version}.zip"
+archive_name="v-agent-helper-${configured_version}.zip"
 archive_path="${distribution_directory}/${archive_name}"
 relative_archive_path="jetbrains/build/distributions/${archive_name}"
 
@@ -44,8 +44,8 @@ if ! unzip -tq "${archive_path}" >/dev/null; then
 fi
 
 archive_entries="$(unzip -Z1 "${archive_path}")"
-if ! grep -Fxq "v-codex-helper/" <<<"${archive_entries}" ||
-  ! grep -Fxq "v-codex-helper/lib/v-codex-helper-${configured_version}.jar" <<<"${archive_entries}"; then
+if ! grep -Fxq "v-agent-helper/" <<<"${archive_entries}" ||
+  ! grep -Fxq "v-agent-helper/lib/v-agent-helper-${configured_version}.jar" <<<"${archive_entries}"; then
   echo "::error::The release ZIP does not contain the expected installable plugin layout."
   exit 1
 fi

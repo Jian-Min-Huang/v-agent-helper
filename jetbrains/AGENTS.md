@@ -2,7 +2,7 @@
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues (`Jian-Min-Huang/v-codex-helper`) via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues are tracked in GitHub Issues (`Jian-Min-Huang/v-agent-helper`) via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

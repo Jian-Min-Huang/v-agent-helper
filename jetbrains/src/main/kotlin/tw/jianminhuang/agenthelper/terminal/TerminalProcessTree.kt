@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.terminal
+package tw.jianminhuang.agenthelper.terminal
 
 /** Returns the command lines of a terminal's root process and its live descendants. */
 internal fun terminalProcessCommands(rootPid: Long?): List<String> {

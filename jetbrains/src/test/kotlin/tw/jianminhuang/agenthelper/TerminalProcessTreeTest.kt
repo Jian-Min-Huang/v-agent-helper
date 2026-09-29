@@ -1,6 +1,6 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.terminal.terminalProcessCommands
+import tw.jianminhuang.agenthelper.terminal.terminalProcessCommands
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

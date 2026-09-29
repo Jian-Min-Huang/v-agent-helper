@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -8,9 +8,9 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VirtualFile
-import tw.jianminhuang.codexhelper.reference.LineRange
-import tw.jianminhuang.codexhelper.reference.TextPosition
-import tw.jianminhuang.codexhelper.service.CodexTerminalSender
+import tw.jianminhuang.agenthelper.reference.LineRange
+import tw.jianminhuang.agenthelper.reference.TextPosition
+import tw.jianminhuang.agenthelper.service.CodexTerminalSender
 
 class SendToCodexAction : DumbAwareAction() {
     /** 在背景執行緒執行頻繁的可用性檢查，以便安全讀取 Editor 與 VirtualFile 資料。 */

@@ -33,7 +33,7 @@
 - IntelliJ Platform Gradle Plugin 2.x
 - 目標平台：IntelliJ IDEA 2026.1（`sinceBuild = 261`），JDK 21
 - 依賴內建 plugin `org.jetbrains.plugins.terminal`（使用新版 Terminal 的 frontend API）
-- Plugin ID：`tw.jianminhuang.codexhelper`，顯示名稱：`Codex Helper`
+- Plugin ID：`tw.jianminhuang.agenthelper`，顯示名稱：`Agent Helper`
 
 ## 會用到的 Terminal API（已在 2026.1.3 / build 261.25134.95 用 javap 確認）
 
@@ -141,7 +141,7 @@ tab 的 session 還在跑（`sessionState` 是 `Running`），而且符合以下
 
 ## 錯誤處理
 
-所有通知使用「Codex Helper」通知群組（balloon）。
+所有通知使用「Agent Helper」通知群組（balloon）。
 
 | 情況 | 處理 |
 |---|---|

@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.reference
+package tw.jianminhuang.agenthelper.reference
 
 /**
  * Builds the ` path ` or ` path#L10-L20 ` text pasted into Codex's input box, written the way Codex's own

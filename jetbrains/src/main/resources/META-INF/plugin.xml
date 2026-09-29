@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>tw.jianminhuang.codexhelper</id>
-    <name>Codex Helper</name>
+    <id>tw.jianminhuang.agenthelper</id>
+    <name>Agent Helper</name>
     <vendor>Vincent Huang</vendor>
 
     <description>
@@ -14,12 +14,12 @@
     <depends>org.jetbrains.plugins.terminal</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <notificationGroup id="Codex Helper" displayType="BALLOON"/>
+        <notificationGroup id="Agent Helper" displayType="BALLOON"/>
     </extensions>
 
     <actions>
-        <action id="tw.jianminhuang.codexhelper.SendToCodex"
-                class="tw.jianminhuang.codexhelper.SendToCodexAction"
+        <action id="tw.jianminhuang.agenthelper.SendToCodex"
+                class="tw.jianminhuang.agenthelper.SendToCodexAction"
                 text="Send to Codex"
                 description="Paste a reference to this file into the Codex CLI running in the Terminal"
                 icon="/icons/codex.svg">

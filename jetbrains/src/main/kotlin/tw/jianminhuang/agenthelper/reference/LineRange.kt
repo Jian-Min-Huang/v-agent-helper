@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.reference
+package tw.jianminhuang.agenthelper.reference
 
 /** A 0-based line and column in a document, as the editor counts them. */
 data class TextPosition(val line: Int, val column: Int)

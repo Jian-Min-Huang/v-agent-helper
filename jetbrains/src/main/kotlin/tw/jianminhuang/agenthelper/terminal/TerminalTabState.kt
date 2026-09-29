@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.terminal
+package tw.jianminhuang.agenthelper.terminal
 
 private const val CODEX_NPM_PACKAGE = "@openai/codex"
 private val WHITESPACE = Regex("\\s+")

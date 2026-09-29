@@ -6,21 +6,21 @@
 flowchart TD
     User["使用者：選取程式碼<br/>Send to Codex"]
 
-    subgraph Entry["codexhelper（外掛入口）"]
+    subgraph Entry["agenthelper（外掛入口）"]
         XML["plugin.xml<br/>註冊選單與工具列 Action"]
         Action["SendToCodexAction.kt<br/>存檔、讀取檔案與選取範圍"]
     end
 
-    subgraph Reference["codexhelper.reference（建立 Reference）"]
+    subgraph Reference["agenthelper.reference（建立 Reference）"]
         Range["LineRange.kt<br/>選取位置 → 行號範圍"]
         Formatter["CodexReferenceFormatter.kt<br/>路徑與行號 → Reference"]
     end
 
-    subgraph Service["codexhelper.service（流程協調）"]
+    subgraph Service["agenthelper.service（流程協調）"]
         Sender["CodexTerminalSender.kt<br/>整體流程協調者"]
     end
 
-    subgraph TerminalLogic["codexhelper.terminal（辨識與廣播）"]
+    subgraph TerminalLogic["agenthelper.terminal（辨識與廣播）"]
         State["TerminalTabState.kt<br/>判斷 Terminal 狀態與 Codex 指令"]
         Process["TerminalProcessTree.kt<br/>Powerlevel10k 備援偵測"]
         Broadcast["CodexBroadcast.kt<br/>篩選接收者、逐一傳送、收集失敗"]

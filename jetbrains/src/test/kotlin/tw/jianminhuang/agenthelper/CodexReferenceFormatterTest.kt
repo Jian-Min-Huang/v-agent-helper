@@ -1,7 +1,7 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.reference.CodexReferenceFormatter
-import tw.jianminhuang.codexhelper.reference.LineRange
+import tw.jianminhuang.agenthelper.reference.CodexReferenceFormatter
+import tw.jianminhuang.agenthelper.reference.LineRange
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

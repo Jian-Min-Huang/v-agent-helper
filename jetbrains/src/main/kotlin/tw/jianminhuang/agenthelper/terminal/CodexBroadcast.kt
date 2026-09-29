@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.terminal
+package tw.jianminhuang.agenthelper.terminal
 
 import com.intellij.openapi.diagnostic.ControlFlowException
 import java.util.concurrent.CancellationException

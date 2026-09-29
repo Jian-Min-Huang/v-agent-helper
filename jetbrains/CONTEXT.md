@@ -1,4 +1,4 @@
-# Codex Helper
+# Agent Helper
 
 在 IntelliJ 內把編輯器裡的檔案位置送進已經開著的 Codex CLI，讓使用者不用在 Codex 裡自己搜尋檔案、補行號。
 

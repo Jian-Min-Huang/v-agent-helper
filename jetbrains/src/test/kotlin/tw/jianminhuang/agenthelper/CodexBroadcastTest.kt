@@ -1,7 +1,7 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.terminal.CodexBroadcast
-import tw.jianminhuang.codexhelper.terminal.CodexInstanceCandidate
+import tw.jianminhuang.agenthelper.terminal.CodexBroadcast
+import tw.jianminhuang.agenthelper.terminal.CodexInstanceCandidate
 import java.util.concurrent.CancellationException
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,1 +1,1 @@
-rootProject.name = "v-codex-helper"
+rootProject.name = "v-agent-helper"

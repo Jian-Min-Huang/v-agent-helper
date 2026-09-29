@@ -1,4 +1,4 @@
-package tw.jianminhuang.codexhelper.service
+package tw.jianminhuang.agenthelper.service
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
@@ -13,16 +13,16 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.jetbrains.plugins.terminal.startup.TerminalProcessType
 import org.jetbrains.plugins.terminal.view.shellIntegration.TerminalCommandBlock
-import tw.jianminhuang.codexhelper.terminal.CodexBroadcast
-import tw.jianminhuang.codexhelper.terminal.CodexInstanceCandidate
-import tw.jianminhuang.codexhelper.terminal.TerminalTabState
-import tw.jianminhuang.codexhelper.terminal.isRunningCodex
-import tw.jianminhuang.codexhelper.reference.CodexReferenceFormatter
-import tw.jianminhuang.codexhelper.reference.LineRange
-import tw.jianminhuang.codexhelper.terminal.rethrowIfControlFlow
-import tw.jianminhuang.codexhelper.terminal.terminalProcessCommands
+import tw.jianminhuang.agenthelper.terminal.CodexBroadcast
+import tw.jianminhuang.agenthelper.terminal.CodexInstanceCandidate
+import tw.jianminhuang.agenthelper.terminal.TerminalTabState
+import tw.jianminhuang.agenthelper.terminal.isRunningCodex
+import tw.jianminhuang.agenthelper.reference.CodexReferenceFormatter
+import tw.jianminhuang.agenthelper.reference.LineRange
+import tw.jianminhuang.agenthelper.terminal.rethrowIfControlFlow
+import tw.jianminhuang.agenthelper.terminal.terminalProcessCommands
 
-private const val NOTIFICATION_GROUP_ID = "Codex Helper"
+private const val NOTIFICATION_GROUP_ID = "Agent Helper"
 private const val CODEX_NOT_FOUND_MESSAGE = "找不到正在執行的 Codex，請先在 Terminal 執行 codex"
 private const val SEND_FAILED_TITLE = "Send to Codex 失敗"
 

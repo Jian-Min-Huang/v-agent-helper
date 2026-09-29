@@ -1,7 +1,7 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.terminal.TerminalTabState
-import tw.jianminhuang.codexhelper.terminal.isRunningCodex
+import tw.jianminhuang.agenthelper.terminal.TerminalTabState
+import tw.jianminhuang.agenthelper.terminal.isRunningCodex
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

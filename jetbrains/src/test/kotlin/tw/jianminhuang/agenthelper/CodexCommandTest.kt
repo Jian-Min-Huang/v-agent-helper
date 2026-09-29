@@ -1,6 +1,6 @@
-package tw.jianminhuang.codexhelper
+package tw.jianminhuang.agenthelper
 
-import tw.jianminhuang.codexhelper.terminal.isCodexCommand
+import tw.jianminhuang.agenthelper.terminal.isCodexCommand
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
