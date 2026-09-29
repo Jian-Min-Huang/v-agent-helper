@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.21"
+    id("org.jetbrains.kotlin.jvm") version "2.4.20"
     id("org.jetbrains.intellij.platform") version "2.19.0"
 }
 
@@ -24,7 +24,7 @@ dependencies {
     }
 
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.13.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
