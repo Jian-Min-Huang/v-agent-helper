@@ -16,10 +16,6 @@ The reference is pasted into every running Codex instance, even when its input a
 
 There's no default shortcut. To add one, search for **Send to Codex** in **Settings › Keymap**.
 
-![](./images/FloatingCodeToolbar.png)
-![](./images/EditorPopupMenu.png)
-![](./images/Reference.png)
-
 ### What gets sent
 
 | Selection         | Pasted text          |
@@ -61,7 +57,7 @@ The right-click menu works for any local file.
 
 ## Install
 
-Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `jetbrains-vVERSION` release, and download its plugin ZIP. Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
+Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `jetbrains-v$VERSION` release, and download its plugin ZIP. Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
 
 To build the plugin from source instead:
 
@@ -89,8 +85,8 @@ CI runs `./gradlew --no-daemon test verifyPlugin buildPlugin` for every pull req
 2. Create an annotated tag at that commit and push it:
 
    ```sh
-   git tag -a jetbrains-vMAJOR.MINOR.PATCH -m "jetbrains-vMAJOR.MINOR.PATCH"
-   git push origin jetbrains-vMAJOR.MINOR.PATCH
+   git tag -a jetbrains-v$MAJOR.$MINOR.$PATCH -m "jetbrains-v$MAJOR.$MINOR.$PATCH"
+   git push origin jetbrains-v$MAJOR.$MINOR.$PATCH
    ```
 
 The **Release JetBrains** workflow validates the existing tag, reruns the complete plugin verification gate, and publishes its versioned ZIP to GitHub Releases. It never creates, moves, or pushes a tag.

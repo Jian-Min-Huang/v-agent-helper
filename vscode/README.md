@@ -8,7 +8,7 @@ Select some lines and choose **Send to Codex ⌨️** or **Send to Claude Code �
 
 ### Install a released VSIX
 
-1. Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `vscode-vVERSION` release, and download its `agent-helper-VERSION.vsix` file.
+1. Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `vscode-v$VERSION` release, and download its `agent-helper-$VERSION.vsix` file.
 2. Open VS Code.
 3. Open the Command Palette with **Cmd+Shift+P** on macOS or **Ctrl+Shift+P** on Windows/Linux.
 4. Run **Extensions: Install from VSIX...** and select the downloaded file.
@@ -17,14 +17,14 @@ Select some lines and choose **Send to Codex ⌨️** or **Send to Claude Code �
 The equivalent terminal command is:
 
 ```sh
-code --install-extension ./agent-helper-VERSION.vsix --force
+code --install-extension ./agent-helper-$VERSION.vsix --force
 ```
 
 If you previously installed the POC, remove its old extension ID first so the two versions do not appear side by side:
 
 ```sh
 code --uninstall-extension jianminhuang.codex-helper-poc
-code --install-extension ./agent-helper-VERSION.vsix --force
+code --install-extension ./agent-helper-$VERSION.vsix --force
 ```
 
 ## Usage
@@ -37,11 +37,11 @@ There is no default keyboard shortcut. Search for either command in **Keyboard S
 
 ### What gets sent
 
-| Selection | Codex | Claude Code |
-|---|---|---|
-| None | `src/Foo.ts` | `@src/Foo.ts` |
-| Within one line | `src/Foo.ts#L12` | `@src/Foo.ts#L12` |
-| Across lines | `src/Foo.ts#L10-L20` | `@src/Foo.ts#L10-L20` |
+| Selection       | Codex                | Claude Code           |
+| --------------- | -------------------- | --------------------- |
+| None            | `src/Foo.ts`         | `@src/Foo.ts`         |
+| Within one line | `src/Foo.ts#L12`     | `@src/Foo.ts#L12`     |
+| Across lines    | `src/Foo.ts#L10-L20` | `@src/Foo.ts#L10-L20` |
 
 - The active file is saved before the Reference is sent.
 - A path containing whitespace is wrapped in double quotes, with the line range outside the quotes.
@@ -100,12 +100,12 @@ The core behavior is tested through three interfaces: Reference construction, ag
    npm run package
    ```
 
-3. Install the generated `agent-helper-VERSION.vsix` locally and repeat the Usage checks above.
+3. Install the generated `agent-helper-$VERSION.vsix` locally and repeat the Usage checks above.
 4. Commit the release version, merge it to `main`, then create and push an annotated tag:
 
    ```sh
-   git tag -a vscode-vMAJOR.MINOR.PATCH -m "vscode-vMAJOR.MINOR.PATCH"
-   git push origin vscode-vMAJOR.MINOR.PATCH
+   git tag -a vscode-v$MAJOR.$MINOR.$PATCH -m "vscode-v$MAJOR.$MINOR.$PATCH"
+   git push origin vscode-v$MAJOR.$MINOR.$PATCH
    ```
 
 The **Release VS Code** workflow validates that the tag matches `package.json`, reruns the verification gate, and publishes the VSIX to GitHub Releases. It never publishes to the VS Code Marketplace or creates, moves, or pushes a tag.
