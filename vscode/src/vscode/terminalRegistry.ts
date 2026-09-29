@@ -5,6 +5,13 @@ import {
   type DetectionSource,
   type TerminalSnapshot,
 } from "../core/detection";
+import {
+  findHerdrSessions,
+  matchHerdrAgent,
+  type HerdrAgent,
+  type HerdrSession,
+} from "../core/herdr";
+import { listHerdrAgents, sendHerdrText } from "./herdrCli";
 import { readProcessTable } from "./processTable";
 
 interface LiveExecution {
@@ -18,8 +25,19 @@ export interface TerminalDiagnostic {
   readonly sources: readonly DetectionSource[];
 }
 
+export interface AgentRecipient {
+  readonly name: string;
+  send(reference: string): Promise<void>;
+}
+
+interface HerdrSessionScan {
+  readonly session: HerdrSession;
+  readonly agents: readonly HerdrAgent[];
+  readonly error?: string;
+}
+
 export interface TerminalScan {
-  readonly recipients: readonly vscode.Terminal[];
+  readonly recipients: readonly AgentRecipient[];
   readonly diagnostics: readonly TerminalDiagnostic[];
 }
 
@@ -60,10 +78,19 @@ export class AgentTerminalRegistry implements vscode.Disposable {
       pid: snapshot.rootPid,
       sources: sourcesByTerminal.get(snapshot.terminal) ?? [],
     }));
+    const herdrSessions = await Promise.all(
+      findHerdrSessions({ terminals, processes }).map(session => scanHerdrSession(session)),
+    );
+    const workspaceRoots = vscode.workspace.workspaceFolders?.map(folder => folder.uri.fsPath) ?? [];
 
-    this.writeState(agent, diagnostics);
+    this.writeState(agent, diagnostics, herdrSessions, workspaceRoots);
     return {
-      recipients: detections.map(detection => detection.terminal),
+      recipients: [
+        ...detections.map(detection => terminalRecipient(detection.terminal)),
+        ...herdrSessions.flatMap(scan => scan.agents
+          .filter(herdrAgent => matchHerdrAgent(agent, herdrAgent, workspaceRoots) === "recipient")
+          .map(herdrAgent => herdrRecipient(scan.session, herdrAgent))),
+      ],
       diagnostics,
     };
   }
@@ -87,7 +114,12 @@ export class AgentTerminalRegistry implements vscode.Disposable {
     };
   }
 
-  private writeState(agent: SupportedAgent, diagnostics: readonly TerminalDiagnostic[]): void {
+  private writeState(
+    agent: SupportedAgent,
+    diagnostics: readonly TerminalDiagnostic[],
+    herdrSessions: readonly HerdrSessionScan[],
+    workspaceRoots: readonly string[],
+  ): void {
     const agentName = displayName(agent);
     this.log.appendLine(`[state:${agent}] ${new Date().toISOString()}`);
     if (diagnostics.length === 0) {
@@ -100,7 +132,49 @@ export class AgentTerminalRegistry implements vscode.Disposable {
         : `${agentName} via ${diagnostic.sources.join(" + ")}`;
       this.log.appendLine(`  ${diagnostic.name} pid=${String(diagnostic.pid)}: ${state}`);
     }
+    for (const scan of herdrSessions) {
+      if (scan.error !== undefined) {
+        this.log.appendLine(`  ${herdrSessionName(scan.session)}: ${scan.error}`);
+        continue;
+      }
+      this.log.appendLine(`  ${herdrSessionName(scan.session)}: ${scan.agents.length} agent(s)`);
+      for (const herdrAgent of scan.agents) {
+        const match = matchHerdrAgent(agent, herdrAgent, workspaceRoots);
+        const state = match === "recipient"
+          ? `${agentName} via herdr`
+          : match === "other agent" ? `not ${agentName}` : `${agentName} outside workspace`;
+        this.log.appendLine(
+          `    pane ${herdrAgent.paneId} ${herdrAgent.kind} cwd=${String(herdrAgent.cwd)}: ${state}`,
+        );
+      }
+    }
   }
+}
+
+async function scanHerdrSession(session: HerdrSession): Promise<HerdrSessionScan> {
+  try {
+    return { session, agents: await listHerdrAgents(session) };
+  } catch (error) {
+    return { session, agents: [], error: errorMessage(error) };
+  }
+}
+
+function terminalRecipient(terminal: vscode.Terminal): AgentRecipient {
+  return {
+    name: `terminal ${terminal.name}`,
+    send: async reference => terminal.sendText(reference, false),
+  };
+}
+
+function herdrRecipient(session: HerdrSession, herdrAgent: HerdrAgent): AgentRecipient {
+  return {
+    name: `${herdrSessionName(session)} pane ${herdrAgent.paneId}`,
+    send: reference => sendHerdrText(session, herdrAgent.paneId, reference),
+  };
+}
+
+function herdrSessionName(session: HerdrSession): string {
+  return `herdr session ${session.name ?? "default"}`;
 }
 
 function displayName(agent: SupportedAgent): string {

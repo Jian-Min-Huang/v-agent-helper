@@ -29,6 +29,12 @@ export function buildReference(input: ReferenceInput, agent: SupportedAgent): st
   return ` ${prefix}${quoteWhenNeeded(referencePath)}${lineSuffix(input.selection)} `;
 }
 
+export function isWithinRoot(path: string, root: string): boolean {
+  const normalizedPath = normalize(path).replace(/\/$/u, "");
+  const normalizedRoot = normalize(root).replace(/\/$/u, "");
+  return isWithin(`${normalizedPath}/`, normalizedRoot);
+}
+
 function quoteWhenNeeded(value: string): string {
   return /\s/u.test(value) && !value.includes('"') ? `"${value}"` : value;
 }

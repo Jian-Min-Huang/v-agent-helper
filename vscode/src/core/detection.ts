@@ -46,8 +46,7 @@ export function detectAgentTerminals<T>(
   agent: SupportedAgent,
   snapshot: DetectionSnapshot<T>,
 ): readonly AgentDetection<T>[] {
-  const children = childrenByParent(snapshot.processes);
-  const processByPid = new Map(snapshot.processes.map(process => [process.pid, process]));
+  const processTree = indexProcessTree(snapshot.processes);
 
   return snapshot.terminals.flatMap(terminal => {
     const sources: DetectionSource[] = [];
@@ -56,7 +55,7 @@ export function detectAgentTerminals<T>(
     }
     if (
       terminal.rootPid !== undefined &&
-      processTreeContainsAgent(agent, terminal.rootPid, processByPid, children)
+      processTree.descendants(terminal.rootPid).some(process => isAgentCommand(agent, process.command))
     ) {
       sources.push("process tree");
     }
@@ -80,16 +79,27 @@ export function isClaudeCodeCommand(command: string): boolean {
   return isAgentCommand("claude-code", command);
 }
 
+export function commandTokens(command: string): readonly string[] {
+  return command.trim().match(/"[^"]*"|'[^']*'|\S+/gu) ?? [];
+}
+
+export function unquote(token: string): string {
+  return token.replace(/^['"]|['"]$/gu, "");
+}
+
+export function executableNameOf(token: string): string | undefined {
+  return unquote(token).split(/[\\/]/u).at(-1)?.toLowerCase();
+}
+
 function isAgentCommand(agent: SupportedAgent, command: string): boolean {
   const spec = AGENT_COMMAND_SPECS[agent];
-  const tokens = command.trim().match(/"[^"]*"|'[^']*'|\S+/gu) ?? [];
+  const tokens = commandTokens(command);
   const firstToken = tokens[0];
   if (firstToken === undefined) {
     return false;
   }
 
-  const executable = firstToken.replace(/^['"]|['"]$/gu, "");
-  const executableName = executable.split(/[\\/]/u).at(-1)?.toLowerCase();
+  const executableName = executableNameOf(firstToken);
   return executableName === spec.executableName ||
     executableName === `${spec.executableName}.exe` ||
     executableName === `${spec.executableName}.cmd` ||
@@ -99,45 +109,47 @@ function isAgentCommand(agent: SupportedAgent, command: string): boolean {
 }
 
 function isNpmPackageToken(token: string, npmPackage: string): boolean {
-  const normalized = token.replace(/^['"]|['"]$/gu, "");
+  const normalized = unquote(token);
   return normalized === npmPackage || normalized.startsWith(`${npmPackage}@`);
 }
 
 function isInstalledPackagePath(token: string, npmPackage: string): boolean {
-  const normalized = token.replace(/^['"]|['"]$/gu, "").replaceAll("\\", "/");
+  const normalized = unquote(token).replaceAll("\\", "/");
   return normalized.includes(`/${npmPackage}/`);
 }
 
-function childrenByParent(processes: readonly ProcessSnapshot[]): ReadonlyMap<number, readonly number[]> {
+export interface ProcessTree {
+  descendants(rootPid: number): readonly ProcessSnapshot[];
+}
+
+export function indexProcessTree(processes: readonly ProcessSnapshot[]): ProcessTree {
+  const processByPid = new Map(processes.map(process => [process.pid, process]));
   const children = new Map<number, number[]>();
   for (const process of processes) {
     const childPids = children.get(process.parentPid) ?? [];
     childPids.push(process.pid);
     children.set(process.parentPid, childPids);
   }
-  return children;
-}
 
-function processTreeContainsAgent(
-  agent: SupportedAgent,
-  rootPid: number,
-  processByPid: ReadonlyMap<number, ProcessSnapshot>,
-  children: ReadonlyMap<number, readonly number[]>,
-): boolean {
-  const pending = [rootPid];
-  const visited = new Set<number>();
-  while (pending.length > 0) {
-    const pid = pending.pop();
-    if (pid === undefined || visited.has(pid)) {
-      continue;
-    }
-    visited.add(pid);
+  return {
+    descendants: rootPid => {
+      const found: ProcessSnapshot[] = [];
+      const pending = [rootPid];
+      const visited = new Set<number>();
+      while (pending.length > 0) {
+        const pid = pending.pop();
+        if (pid === undefined || visited.has(pid)) {
+          continue;
+        }
+        visited.add(pid);
 
-    const process = processByPid.get(pid);
-    if (process !== undefined && isAgentCommand(agent, process.command)) {
-      return true;
-    }
-    pending.push(...(children.get(pid) ?? []));
-  }
-  return false;
+        const process = processByPid.get(pid);
+        if (process !== undefined) {
+          found.push(process);
+        }
+        pending.push(...(children.get(pid) ?? []));
+      }
+      return found;
+    },
+  };
 }

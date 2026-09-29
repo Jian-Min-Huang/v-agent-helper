@@ -66,7 +66,7 @@ The right-click menu works for any local file.
 
 ## Install
 
-Download the plugin ZIP from the [latest GitHub Release](https://github.com/Jian-Min-Huang/v-agent-helper/releases/latest). Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
+Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `jetbrains-vVERSION` release, and download its plugin ZIP. Then go to **Settings › Plugins › ⚙ › Install Plugin from Disk…** and choose the downloaded ZIP.
 
 To build the plugin from source instead:
 
@@ -94,13 +94,13 @@ CI runs `./gradlew --no-daemon test verifyPlugin buildPlugin` for every pull req
 2. Create an annotated tag at that commit and push it:
 
    ```sh
-   git tag -a vMAJOR.MINOR.PATCH -m "vMAJOR.MINOR.PATCH"
-   git push origin vMAJOR.MINOR.PATCH
+   git tag -a jetbrains-vMAJOR.MINOR.PATCH -m "jetbrains-vMAJOR.MINOR.PATCH"
+   git push origin jetbrains-vMAJOR.MINOR.PATCH
    ```
 
-The Release workflow validates the existing tag, reruns the complete plugin verification gate, and publishes its versioned ZIP. It never creates, moves, or pushes a tag.
+The **Release JetBrains** workflow validates the existing tag, reruns the complete plugin verification gate, and publishes its versioned ZIP to GitHub Releases. It never creates, moves, or pushes a tag.
 
-If publication is interrupted, open the repository's **Actions › Release › Run workflow** page and enter the same existing tag. A rerun keeps an existing Release and replaces only the same-named plugin ZIP.
+If publication is interrupted, open the repository's **Actions › Release JetBrains › Run workflow** page and enter the same existing tag. A rerun keeps an existing Release and replaces only the same-named plugin ZIP.
 
 - [`docs/2026-09-26-send-to-codex-design.md`](docs/2026-09-26-send-to-codex-design.md): design, manual checks and known risks (in Traditional Chinese)
 - [`CONTEXT.md`](CONTEXT.md): glossary

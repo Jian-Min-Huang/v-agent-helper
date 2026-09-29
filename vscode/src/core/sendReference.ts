@@ -4,7 +4,7 @@ import { buildReference, type ReferenceInput } from "./reference";
 export interface SendHost<T> {
   save(): Promise<boolean>;
   recipients(): Promise<readonly T[]>;
-  send(recipient: T, reference: string): void;
+  send(recipient: T, reference: string): Promise<void>;
 }
 
 export interface DeliveryFailure<T> {
@@ -38,7 +38,7 @@ export async function sendReference<T>(
   const failures: DeliveryFailure<T>[] = [];
   for (const recipient of recipients) {
     try {
-      host.send(recipient, reference);
+      await host.send(recipient, reference);
     } catch (error) {
       failures.push({ recipient, error });
     }

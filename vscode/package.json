@@ -2,7 +2,7 @@
   "name": "agent-helper",
   "displayName": "Agent Helper",
   "description": "Send the active editor file and selected line range to Codex CLI or Claude Code instances running in the integrated Terminal.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publisher": "jianminhuang",
   "preview": true,
   "license": "UNLICENSED",

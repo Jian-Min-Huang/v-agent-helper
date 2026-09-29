@@ -18,7 +18,9 @@ test("one Broadcast sends the same unsubmitted Reference to every Codex instance
     {
       save: async () => true,
       recipients: async () => ["first Codex", "second Codex"],
-      send: (terminal, text) => received.push({ terminal, text }),
+      send: async (terminal, text) => {
+        received.push({ terminal, text });
+      },
     },
   );
 
@@ -48,7 +50,9 @@ test("a Reference is not sent when the active document cannot be saved", async (
     {
       save: async () => false,
       recipients: async () => ["Codex"],
-      send: (_terminal, text) => received.push(text),
+      send: async (_terminal, text) => {
+        received.push(text);
+      },
     },
   );
 
@@ -79,7 +83,7 @@ test("a failed delivery does not prevent later Codex instances from receiving th
     {
       save: async () => true,
       recipients: async () => ["first", "broken", "last"],
-      send: terminal => {
+      send: async terminal => {
         received.push(terminal);
         if (terminal === "broken") {
           throw failure;
@@ -118,7 +122,9 @@ test("a Claude Code Broadcast sends an at-prefixed Reference", async () => {
     {
       save: async () => true,
       recipients: async () => ["Claude Code"],
-      send: (_terminal, text) => received.push(text),
+      send: async (_terminal, text) => {
+        received.push(text);
+      },
     },
   );
 

@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import type { SupportedAgent } from "./core/agent";
 import { sendReference, type SendResult } from "./core/sendReference";
 import type { ReferenceInput } from "./core/reference";
-import { AgentTerminalRegistry } from "./vscode/terminalRegistry";
+import { AgentTerminalRegistry, type AgentRecipient } from "./vscode/terminalRegistry";
 
 const SEND_CODEX_COMMAND = "agentHelper.sendToCodex";
 const SEND_CLAUDE_CODE_COMMAND = "agentHelper.sendToClaudeCode";
@@ -49,9 +49,9 @@ async function sendActiveReference(
   const result = await sendReference(referenceInput(editor), agent, {
     save: async () => editor.document.save(),
     recipients: async () => (await registry.scan(agent)).recipients,
-    send: (terminal, reference) => {
-      terminal.sendText(reference, false);
-      log.info(`Sent ${JSON.stringify(reference)} to ${agentName} terminal ${terminal.name}`);
+    send: async (recipient, reference) => {
+      await recipient.send(reference);
+      log.info(`Sent ${JSON.stringify(reference)} to ${agentName} ${recipient.name}`);
     },
   });
 
@@ -80,7 +80,7 @@ function isSupportedDocument(document: vscode.TextDocument): boolean {
 }
 
 async function report(
-  result: SendResult<vscode.Terminal>,
+  result: SendResult<AgentRecipient>,
   agentName: string,
   log: vscode.LogOutputChannel,
 ): Promise<void> {

@@ -6,26 +6,25 @@ Select some lines and choose **Send to Codex ⌨️** or **Send to Claude Code �
 
 ## Local installation
 
-### Install the included VSIX
+### Install a released VSIX
 
-1. Open VS Code.
-2. Open the Command Palette with **Cmd+Shift+P** on macOS or **Ctrl+Shift+P** on Windows/Linux.
-3. Run **Extensions: Install from VSIX...**.
-4. Select `vscode/agent-helper-0.1.0.vsix` from this repository.
+1. Open [GitHub Releases](https://github.com/Jian-Min-Huang/v-agent-helper/releases), choose the newest `vscode-vVERSION` release, and download its `agent-helper-VERSION.vsix` file.
+2. Open VS Code.
+3. Open the Command Palette with **Cmd+Shift+P** on macOS or **Ctrl+Shift+P** on Windows/Linux.
+4. Run **Extensions: Install from VSIX...** and select the downloaded file.
 5. Reload VS Code when prompted.
 
 The equivalent terminal command is:
 
 ```sh
-cd vscode
-code --install-extension ./agent-helper-0.1.0.vsix --force
+code --install-extension ./agent-helper-VERSION.vsix --force
 ```
 
 If you previously installed the POC, remove its old extension ID first so the two versions do not appear side by side:
 
 ```sh
 code --uninstall-extension jianminhuang.codex-helper-poc
-code --install-extension ./agent-helper-0.1.0.vsix --force
+code --install-extension ./agent-helper-VERSION.vsix --force
 ```
 
 ## Usage
@@ -58,6 +57,16 @@ Each send command broadcasts once to every matching agent instance it detects in
 - A process-tree fallback for agents already running before extension activation or terminals without shell integration.
 - `ps` on macOS/Linux and PowerShell CIM on Windows.
 
+### herdr
+
+When an integrated Terminal runs a [herdr](https://herdr.dev) client (`herdr`, `herdr --session NAME`, or `herdr session attach NAME`), the agents live under the herdr server rather than under that Terminal, so Agent Helper asks the attached session directly:
+
+- `herdr agent list` finds the Codex (`codex`) and Claude Code (`claude`) panes in that session.
+- Only herdr agents whose working directory is inside one of this window's workspace folders receive the Reference, so several VS Code windows can share one herdr session without sending to each other's agents. With no folder open, every matching herdr agent receives it.
+- `herdr pane send-text` inserts the Reference into each pane directly, whichever herdr pane is focused. No Enter key is sent.
+
+The `herdr` executable must be on the `PATH` seen by VS Code, or the client must have been started with an absolute path. Remote attachments (`--remote`, `--machine`) are not supported.
+
 Run **Agent Helper: Show Detection State** from the Command Palette to inspect Terminal names, PIDs, and detection sources in the **Agent Helper** output channel.
 
 ## Requirements
@@ -79,7 +88,7 @@ Press **F5** to open an Extension Development Host with the extension loaded.
 
 The core behavior is tested through three interfaces: Reference construction, agent terminal detection, and Broadcast delivery. VS Code and operating-system process discovery are adapters around those modules.
 
-## Manual release
+## Publishing a release
 
 1. Update `version` in `package.json` and run `npm install` to update `package-lock.json`.
 2. Verify and package:
@@ -92,10 +101,18 @@ The core behavior is tested through three interfaces: Reference construction, ag
    ```
 
 3. Install the generated `agent-helper-VERSION.vsix` locally and repeat the Usage checks above.
-4. Commit the release version and create a tag named `vscode-vVERSION`.
-5. Create a GitHub Release manually and upload the generated VSIX.
+4. Commit the release version, merge it to `main`, then create and push an annotated tag:
 
-Publishing to the VS Code Marketplace is intentionally separate from this manual GitHub Release flow and requires a Marketplace publisher account.
+   ```sh
+   git tag -a vscode-vMAJOR.MINOR.PATCH -m "vscode-vMAJOR.MINOR.PATCH"
+   git push origin vscode-vMAJOR.MINOR.PATCH
+   ```
+
+The **Release VS Code** workflow validates that the tag matches `package.json`, reruns the verification gate, and publishes the VSIX to GitHub Releases. It never publishes to the VS Code Marketplace or creates, moves, or pushes a tag.
+
+If publication is interrupted, open the repository's **Actions › Release VS Code › Run workflow** page and enter the same existing tag. A rerun keeps an existing Release and replaces only the same-named VSIX.
+
+Publishing to the VS Code Marketplace remains intentionally unsupported by this workflow.
 
 ## Uninstall
 
@@ -109,5 +126,6 @@ code --uninstall-extension jianminhuang.agent-helper
 
 - VS Code's `Terminal.sendText` does not acknowledge that the terminal application consumed the input. A missing error means the extension attempted the delivery, not that the agent confirmed receipt.
 - Terminal process discovery depends on process information being visible to the VS Code extension host.
+- herdr agents started outside the workspace folder, for example in a parent directory, are listed in **Show Detection State** as outside the workspace and do not receive the Reference.
 
 Agent Helper is an independent extension and is not affiliated with or endorsed by OpenAI or Anthropic.
