@@ -1,4 +1,4 @@
-# v-agent-helper
+# v-agent-helper [![CI](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml/badge.svg)](https://github.com/Jian-Min-Huang/v-agent-helper/actions/workflows/ci.yml)
 
 ## JetBrains
 
